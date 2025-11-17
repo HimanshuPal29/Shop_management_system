@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/api", 
+  baseURL: "https://shop-management-system-hzjh.onrender.com/api", 
 });
 
 // Add token automatically
