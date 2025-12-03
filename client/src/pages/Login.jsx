@@ -1,109 +1,144 @@
 // src/pages/Login.jsx
 import { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    alert("Login Success!");
+    setError(null);
+    setLoading(true);
+
+    try {
+      await login(formData.email, formData.password);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Welcome Back 👋</h2>
-        <p style={styles.subtitle}>Login to continue</p>
+    <div className="auth-split-container">
+      {/* Left Side - Branding */}
+      <div className="auth-left-panel">
+        <div className="branding-content">
+          <div className="brand-logo">🏪</div>
+          <h1 className="brand-title">Shop Management</h1>
+          <p className="brand-tagline">Your Complete Inventory Solution</p>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="features-list">
+            <div className="feature-item">
+              <span className="feature-icon">📦</span>
+              <div>
+                <h3>Inventory Management</h3>
+                <p>Track products, prices, and stock levels</p>
+              </div>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">💰</span>
+              <div>
+                <h3>Real-time Analytics</h3>
+                <p>Monitor inventory value and low stock alerts</p>
+              </div>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">👥</span>
+              <div>
+                <h3>Role-based Access</h3>
+                <p>Admin and employee permissions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <input
-            type="password"
-            placeholder="Enter Password"
-            style={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+      {/* Right Side - Login Form */}
+      <div className="auth-right-panel">
+        <div className="auth-form-container">
+          <div className="auth-form-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to your account</p>
+          </div>
 
-          <button type="submit" style={styles.button}>
-            Login
-          </button>
-        </form>
+          {error && (
+            <div className="alert alert-error">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder="Enter your email"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder="Enter your password"
+                disabled={loading}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn-submit-auth"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="loading-spinner"></span>
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/register" className="auth-link">Sign up</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #6a11cb, #2575fc)",
-    padding: "20px",
-  },
-
-  card: {
-    width: "350px",
-    padding: "30px",
-    borderRadius: "12px",
-    backgroundColor: "#ffffffee",
-    boxShadow: "0px 8px 20px rgba(0,0,0,0.15)",
-    textAlign: "center",
-  },
-
-  title: {
-    marginBottom: "5px",
-    fontSize: "26px",
-    color: "#333",
-  },
-
-  subtitle: {
-    marginBottom: "20px",
-    color: "#777",
-    fontSize: "14px",
-  },
-
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "15px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    outline: "none",
-    fontSize: "14px",
-    transition: "0.3s",
-  },
-
-  button: {
-    width: "100%",
-    padding: "12px",
-    marginTop: "5px",
-    backgroundColor: "#2575fc",
-    border: "none",
-    borderRadius: "8px",
-    color: "white",
-    fontSize: "16px",
-    cursor: "pointer",
-    transition: "0.3s",
-  },
-};
-
-// Add hover effect
-styles.input[":focus"] = { borderColor: "#6a11cb" };
-styles.button[":hover"] = { backgroundColor: "#1a5fd0" };
 
 export default Login;

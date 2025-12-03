@@ -2,18 +2,45 @@
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Dashboard from "./pages/Dashboard";
+import Inventory from "./pages/Inventory";
+import AddProduct from "./pages/AddProduct";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   return (
     <AuthProvider>
-      {/* Routes example */}
       <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register/>} />
-        <Route path="/" element={<h1>Home Page</h1>}/>
-      </Routes>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute>
+                <Inventory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-product"
+            element={
+              <ProtectedRoute>
+                <AddProduct />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
