@@ -72,7 +72,7 @@ const Dashboard = () => {
             <main className="dashboard-main">
                 {/* Welcome Section */}
                 <div className="welcome-section">
-                    <h2>Welcome back, {user?.username}! 👋</h2>
+                    <h2>Welcome back, {user?.username}! </h2>
                     <p>Here's what's happening with your inventory today.</p>
                 </div>
 

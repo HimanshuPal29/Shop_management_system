@@ -12,17 +12,33 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
     try {
+        console.log('Registration attempt:', { username: req.body.username, email: req.body.email, role: req.body.role });
         const { username, email, password, role } = req.body
+
+        // Check if user exists by email
         const userExist = await User.findOne({ email })
         if (userExist) {
+            console.log('Registration failed: User already exists with email:', email);
             return res.status(400).json({
                 success: false,
-                message: "User already exists"
+                message: "User already exists with this email"
             })
         }
+
+        // Check if username is taken
+        const usernameExist = await User.findOne({ username })
+        if (usernameExist) {
+            console.log('Registration failed: Username already taken:', username);
+            return res.status(400).json({
+                success: false,
+                message: "Username is already taken"
+            })
+        }
+
         const user = await User.create({
             username, email, password, role
         })
+        console.log('User registered successfully:', { id: user.id, username: user.username, email: user.email });
         res.status(201).json({
             success: true,
             data: {
@@ -34,6 +50,7 @@ const register = async (req, res) => {
             }
         })
     } catch (error) {
+        console.error('Registration error:', error.message);
         res.status(500).json({
             success: false,
             message: error.message

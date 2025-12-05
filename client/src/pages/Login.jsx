@@ -96,6 +96,7 @@ const Login = () => {
                 className="form-input"
                 placeholder="Enter your email"
                 disabled={loading}
+                autoComplete="email"
               />
             </div>
 
@@ -110,6 +111,8 @@ const Login = () => {
                 className="form-input"
                 placeholder="Enter your password"
                 disabled={loading}
+                autoComplete="off"
+                data-form-type="other"
               />
             </div>
 

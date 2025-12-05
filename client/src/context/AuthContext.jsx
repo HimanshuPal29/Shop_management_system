@@ -12,22 +12,32 @@ export const AuthProvider = ({ children }) => {
 
   // LOGIN
   const login = async (email, password) => {
+    console.log('Login called with:', email);
     const res = await loginUser({ email, password });
-    setToken(res.data.token);
-    setUser(res.data);
+    console.log('Login response:', res);
+    const userData = res.data; // res is {success, data:{token, user...}}
+    console.log('User data:', userData);
+    setToken(userData.token);
+    setUser(userData);
 
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(res.data));
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    console.log('Login complete, user set:', userData);
   };
 
   // REGISTER
   const register = async (username, email, password, role) => {
+    console.log('Register called with:', { username, email, role });
     const res = await registerUser({ username, email, password, role });
-    setToken(res.data.token);
-    setUser(res.data);
+    console.log('Register response:', res);
+    const userData = res.data; // res is {success, data:{token, user...}}
+    console.log('User data:', userData);
+    setToken(userData.token);
+    setUser(userData);
 
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(res.data));
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    console.log('Registration complete, user set:', userData);
   };
 
   // LOGOUT

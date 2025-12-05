@@ -104,6 +104,7 @@ const Register = () => {
                 className="form-input"
                 placeholder="Enter your username"
                 disabled={loading}
+                autoComplete="username"
               />
             </div>
 
@@ -118,6 +119,7 @@ const Register = () => {
                 className="form-input"
                 placeholder="Enter your email"
                 disabled={loading}
+                autoComplete="email"
               />
             </div>
 
@@ -133,6 +135,8 @@ const Register = () => {
                 className="form-input"
                 placeholder="At least 6 characters"
                 disabled={loading}
+                autoComplete="off"
+                data-form-type="other"
               />
             </div>
 
