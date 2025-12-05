@@ -15,7 +15,7 @@ const register = async (req, res) => {
         console.log('Registration attempt:', { username: req.body.username, email: req.body.email, role: req.body.role });
         const { username, email, password, role } = req.body
 
-        // Check if user exists by email
+
         const userExist = await User.findOne({ email })
         if (userExist) {
             console.log('Registration failed: User already exists with email:', email);
@@ -25,7 +25,7 @@ const register = async (req, res) => {
             })
         }
 
-        // Check if username is taken
+
         const usernameExist = await User.findOne({ username })
         if (usernameExist) {
             console.log('Registration failed: Username already taken:', username);

@@ -1,8 +1,6 @@
 const Product = require('../models/product');
 
-// @desc    Get all products
-// @route   GET /api/products
-// @access  Private
+
 const getProducts = async (req, res) => {
     try {
         const products = await Product.find({}).sort({ createdAt: -1 });
@@ -20,9 +18,7 @@ const getProducts = async (req, res) => {
     }
 };
 
-// @desc    Get single product by ID
-// @route   GET /api/products/:id
-// @access  Private
+
 const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -46,14 +42,12 @@ const getProductById = async (req, res) => {
     }
 };
 
-// @desc    Add new product
-// @route   POST /api/products
-// @access  Private/Admin
+
 const addProduct = async (req, res) => {
     try {
         const { productId, name, description, costPrice, sellingPrice, quantity, category } = req.body;
 
-        // Check if product with productId already exists (if provided)
+
         if (productId) {
             const existingProduct = await Product.findOne({ productId });
             if (existingProduct) {
@@ -86,9 +80,7 @@ const addProduct = async (req, res) => {
     }
 };
 
-// @desc    Update product stock/quantity
-// @route   PATCH /api/products/:id/stock
-// @access  Private/Employee or Admin
+
 const updateProductStock = async (req, res) => {
     try {
         const { quantity } = req.body;
@@ -124,14 +116,12 @@ const updateProductStock = async (req, res) => {
     }
 };
 
-// @desc    Update product details (price, quantity, etc.)
-// @route   PUT /api/products/:id
-// @access  Private/Employee or Admin
+
 const updateProduct = async (req, res) => {
     try {
         const { costPrice, sellingPrice, quantity, name, description, category } = req.body;
 
-        // Validate MongoDB ObjectId
+
         const mongoose = require('mongoose');
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({
@@ -153,7 +143,7 @@ const updateProduct = async (req, res) => {
             });
         }
 
-        // Update fields if provided
+
         if (name !== undefined) product.name = name;
         if (description !== undefined) product.description = description;
         if (category !== undefined) product.category = category;

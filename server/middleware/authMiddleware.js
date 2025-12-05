@@ -1,19 +1,19 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// Protect routes - verify JWT token
+
 const protect = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
-            // Get token from header
+
             token = req.headers.authorization.split(' ')[1];
 
-            // Verify token
+
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-            // Get user from token
+
             req.user = await User.findById(decoded.id).select('-password');
 
             if (!req.user) {
@@ -41,7 +41,7 @@ const protect = async (req, res, next) => {
     }
 };
 
-// Role-based access control
+
 const authorize = (...roles) => {
     return (req, res, next) => {
         if (!req.user) {

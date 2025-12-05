@@ -40,10 +40,10 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Auto-generate productId before saving if not provided
+
 productSchema.pre('save', function (next) {
     if (!this.productId) {
-        // Generate productId: PRD + timestamp + random 3 digits
+
         this.productId = 'PRD' + Date.now() + Math.floor(Math.random() * 1000);
     }
     next();
